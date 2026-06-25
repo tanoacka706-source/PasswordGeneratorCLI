@@ -1,4 +1,6 @@
 package ci.univmetiers.passwordgenerator;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 
 public class Main {
 
@@ -31,8 +33,29 @@ public class Main {
 
         // 5. génération en boucle
         for (int i = 1; i <= count; i++) {
-            String password = generator.generate(length, lower, upper, digits, symbols);
-            System.out.println(i + ". " + password);
+
+            try {
+
+                String password = generator.generate(length, lower, upper, digits, symbols);
+
+                ProcessBuilder pb = new ProcessBuilder(
+                        "docker", "run", "--rm",
+                        "password-analyzer",
+                        password
+                );
+
+                Process process = pb.start();
+
+                BufferedReader reader =
+                        new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+                String strength = reader.readLine();
+
+                System.out.println(i + ". " + password + " → " + strength);
+
+            } catch (Exception e) {
+                System.out.println("Erreur Docker : " + e.getMessage());
+            }
         }
-    }
+}
 }

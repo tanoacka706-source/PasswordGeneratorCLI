@@ -11,6 +11,16 @@ public class PasswordGenerator {
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
+    public String evaluateStrength(String password) {
+
+        int length = password.length();
+
+        if (length < 6) return "Très faible";
+        if (length < 10) return "Faible";
+        if (length < 14) return "Moyen";
+        if (length < 18) return "Fort";
+        return "Très fort";
+    }
     public String generate(int length, boolean lower, boolean upper, boolean digits, boolean symbols) {
 
         StringBuilder chars = new StringBuilder();
