@@ -11,14 +11,36 @@ public class PasswordGenerator {
 
     private static final SecureRandom RANDOM = new SecureRandom();
 
-    public String generate(int length) {
+    public String generate(int length, boolean lower, boolean upper, boolean digits, boolean symbols) {
 
-        String chars = LOWER + UPPER + DIGITS + SYMBOLS;
+        StringBuilder chars = new StringBuilder();
+
+        if (lower) {
+            chars.append(LOWER);
+        }
+
+        if (upper) {
+            chars.append(UPPER);
+        }
+
+        if (digits) {
+            chars.append(DIGITS);
+        }
+
+        if (symbols) {
+            chars.append(SYMBOLS);
+        }
+
+        // sécurité : si rien n'est sélectionné
+        if (chars.length() == 0) {
+            throw new IllegalArgumentException("Aucun type de caractère sélectionné !");
+        }
 
         StringBuilder password = new StringBuilder();
 
         for (int i = 0; i < length; i++) {
-            password.append(chars.charAt(RANDOM.nextInt(chars.length())));
+            int index = RANDOM.nextInt(chars.length());
+            password.append(chars.charAt(index));
         }
 
         return password.toString();

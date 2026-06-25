@@ -4,22 +4,27 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int length = 20;
-
-        if (args.length > 0) {
-            try {
-                length = Integer.parseInt(args[0]);
-            } catch (NumberFormatException e) {
-                System.out.println("Erreur : la longueur doit être un nombre entier.");
-                return;
-            }
+        // Vérification du nombre d'arguments
+        if (args.length < 5) {
+            System.out.println("Usage : java Main <length> <lower> <upper> <digits> <symbols>");
+            System.out.println("Exemple : java Main 12 true true false false");
+            return;
         }
 
-        System.out.println("Longueur utilisée : " + length);
+        // 1. longueur
+        int length = Integer.parseInt(args[0]);
 
+        // 2. types de caractères
+        boolean lower = Boolean.parseBoolean(args[1]);
+        boolean upper = Boolean.parseBoolean(args[2]);
+        boolean digits = Boolean.parseBoolean(args[3]);
+        boolean symbols = Boolean.parseBoolean(args[4]);
+
+        // 3. génération
         PasswordGenerator generator = new PasswordGenerator();
-        String password = generator.generate(length);
+        String password = generator.generate(length, lower, upper, digits, symbols);
 
+        // 4. affichage
         System.out.println("Mot de passe généré : " + password);
     }
 }
